@@ -34,4 +34,5 @@ class Entity {
         virtual void update();
 
         virtual void collide(std::vector<Entity*> entities);
+        void erase();
 };

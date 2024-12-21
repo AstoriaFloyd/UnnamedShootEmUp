@@ -1,6 +1,12 @@
 #include <raylib.h>
 
 #include "player.hpp"
+#include "projectile.hpp"
+
+#include <vector>
+#include "entity.hpp"
+
+extern std::vector<Entity*> entities;
 
 Player::Player(){
     position = {0.0f, 0.0f, 0.0f};
@@ -61,6 +67,10 @@ void Player::controllerRoutine() {
 
         position.x += leftStickX * speed;
 
+    }
+
+    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)){
+        entities.push_back(new Projectile({ position.x, position.y, position.z }, { 0.5f, 0.5f, 0.0f }, {0.05f, 0.0f}, GRAY, PLAYERPORJECTILECONVENTIONAL));
     }
 }
 

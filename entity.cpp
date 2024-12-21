@@ -1,6 +1,10 @@
 #include <raylib.h>
+#include <algorithm>
+
 
 #include "entity.hpp"
+
+extern std::vector<Entity*> entities;
 
 Entity::Entity(){
     Entity({0.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 0.0f}, PURPLE, ENEMY);
@@ -21,4 +25,11 @@ void Entity::update(){
 }
 
 void Entity::collide(std::vector<Entity*> entities){
+}
+
+void Entity::erase(){
+    auto it = std::find(entities.begin(), entities.end(), this);
+    if (it != entities.end()) { entities.erase(it); }
+    //Causes a crash. Possibly unessesary?
+    //delete this;
 }
