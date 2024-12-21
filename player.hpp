@@ -13,7 +13,7 @@ class Player : public Entity {
         bool collided;
 
         void update();
-        void render();
+        void collide(std::vector<Entity*> entities);
     private:
         void controllerRoutine();
 };

@@ -6,10 +6,12 @@ Player::Player(){
     position = {0.0f, 0.0f, 0.0f};
     size = {1.0f, 1.0f, 0.0f};
     color = GREEN;
+    team = PLAYER;
 }
 
 void Player::update(){
     controllerRoutine();
+    this->color = GREEN;
 }
 
 void Player::controllerRoutine() {
@@ -62,6 +64,28 @@ void Player::controllerRoutine() {
     }
 }
 
-void Player::render(){
-    DrawCubeV(position, size, MAGENTA);
+void Player::collide(std::vector<Entity*> entities){
+    for(auto e : entities){
+        switch(e->team){
+            case ENEMY:
+            case ENEMYPROJECTILECONVENTIONAL:
+            case ENEMYPROJECTILEENERGY:
+                if (CheckCollisionBoxes(
+            (BoundingBox){(Vector3){ this->position.x - this->size.x/2,
+                                     this->position.y - this->size.y/2,
+                                     this->position.z - this->size.z/2 },
+                          (Vector3){ this->position.x + this->size.x/2,
+                                     this->position.y + this->size.y/2,
+                                     this->position.z + this->size.z/2 }},
+            (BoundingBox){(Vector3){ e->position.x - e->size.x/2,
+                                     e->position.y - e->size.y/2,
+                                     e->position.z - e->size.z/2 },
+                          (Vector3){ e->position.x + e->size.x/2,
+                                     e->position.y + e->size.y/2,
+                                     e->position.z + e->size.z/2 }})){
+                                        this->color = RED;
+                                     }
+                
+        }
+    }
 }

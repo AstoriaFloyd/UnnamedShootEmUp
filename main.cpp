@@ -4,6 +4,7 @@
 
 #include "entity.hpp"
 #include "player.hpp"
+#include "projectile.hpp"
 
 //480p my beloved
 #define SCREEN_WDITH 640
@@ -26,20 +27,25 @@ int main() {
     Camera3D camera = { { 0.0f, 0.0f, 10.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, 60.0f, CAMERA_PERSPECTIVE };
 
     //List of entities
-    std::vector<Entity*> entityList;
+    std::vector<Entity*> entities;
 
-    //Create player
-    //SEE IF THIS IS A GOOD WAY OF DOING THIS
-    Player player;
-    entityList.push_back(&player);
+    entities.push_back(new Player());
 
-    entityList.push_back(new Entity({ -4.0f, 1.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, BLUE));
-    entityList.push_back(new Entity({ 4.0f, 1.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, YELLOW));
-    entityList.push_back(new Entity({ 2.0f, -3.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, ORANGE));
+    entities.push_back(new Entity({ -4.0f, 1.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, BLUE, ENEMY));
+    entities.push_back(new Entity({ 4.0f, 1.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, YELLOW, ENEMY));
+    entities.push_back(new Entity({ 2.0f, -3.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, ORANGE, ENEMY));
+
+    entities.push_back(new Projectile({ -3.5f, -1.0f, 0.0f }, { 0.5f, 0.5f, 0.0f }, {0.05f, 0.0f}, BLUE, ENEMYPROJECTILEENERGY));
 
     while(!quitGame) {
-        for(Entity* e : entityList){
+        for(Entity* e:entities){
             e->update();
+        }
+
+        //Collision detection
+
+        for(Entity* e:entities){
+            e->collide(entities);
         }
 
         /*
@@ -77,12 +83,12 @@ int main() {
             ClearBackground(SKYBLUE);
             DrawText("Broken-Moon.net games. Not yet finished.", 0, 0, 12, BLACK);
 
-            DrawText(std::to_string(player.position.x).c_str(), 0, 12, 12, BLACK);
-            DrawText(std::to_string(player.position.y).c_str(), 0, 24, 12, BLACK);
-            DrawText(std::to_string(player.position.z).c_str(), 0, 36, 12, BLACK);
+            //DrawText(std::to_string(player.position.x).c_str(), 0, 12, 12, BLACK);
+            //DrawText(std::to_string(player.position.y).c_str(), 0, 24, 12, BLACK);
+            //DrawText(std::to_string(player.position.z).c_str(), 0, 36, 12, BLACK);
 
             BeginMode3D(camera);
-                for(Entity* e : entityList){
+                for(Entity* e:entities){
                     e->render();
                 }
                 //TestEntity.render();

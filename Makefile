@@ -1,5 +1,5 @@
 TARGET = brokenmoonshmup.elf
-OBJS = main.o entity.o player.o
+OBJS = main.o entity.o player.o projectile.o
 CDI = $(subst .elf,.cdi,$(TARGET))
 
 KOS_CFLAGS += -I${KOS_PORTS}/include/raylib
