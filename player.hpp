@@ -13,7 +13,6 @@ class Player : public Entity {
         bool collided;
         Texture2D bulletTexture;
         void update();
-        void collide(std::vector<Entity*> entities);
     private:
         void controllerRoutine();
 };

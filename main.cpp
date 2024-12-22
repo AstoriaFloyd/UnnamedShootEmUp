@@ -25,6 +25,8 @@ Camera3D camera = { { 0.0f, 0.0f, 10.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0
 
 Texture2D missingTexture;
 
+bool renderDebug = false;
+
 int main() {
     InitWindow(SCREEN_WDITH, SCREEN_HEIGHT, "Does this get used? Unnamed Broken-Moon Shmup.");
 
@@ -35,15 +37,16 @@ int main() {
     
     Image image = LoadImage("/cd/MissingTexture.png");
     missingTexture = LoadTextureFromImage(image);
+    UnloadImage(image);
 
     Player player = Player(missingTexture, missingTexture);
     entities.push_back(&player);
 
-    entities.push_back(new Entity({ -4.0f, 1.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, missingTexture, ENEMY));
-    entities.push_back(new Entity({ 4.0f, 1.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, missingTexture, ENEMY));
-    entities.push_back(new Entity({ 2.0f, -3.0f, 0.0f }, { 1.0f, 1.0f, 0.0f }, missingTexture, ENEMY));
+    entities.push_back(new Entity({ -4.0f, 1.0f, 0.0f }, 1.0f, 0.5f, missingTexture, ENEMY));
+    entities.push_back(new Entity({ 4.0f, 1.0f, 0.0f }, 1.0f, 0.5f, missingTexture, ENEMY));
+    entities.push_back(new Entity({ 2.0f, -3.0f, 0.0f }, 0.5f, 0.5f, missingTexture, ENEMY));
 
-    entities.push_back(new Projectile({ -3.5f, -1.0f, 0.0f }, { 0.5f, 0.5f, 0.0f }, {0.05f, 0.0f}, missingTexture, ENEMYPROJECTILEENERGY));
+    entities.push_back(new Projectile({ -3.5f, -1.0f, 0.0f }, 1.0f, 0.5f, {0.05f, 0.0f}, missingTexture, ENEMYPROJECTILEENERGY));
     
 
     while(!quitGame) {
@@ -104,6 +107,8 @@ int main() {
             
                 for(Entity* e:entities){
                     e->render();
+                    if(renderDebug)
+                        e->renderHitbox();
                 }
                 //TestEntity.render();
                 //player.render();

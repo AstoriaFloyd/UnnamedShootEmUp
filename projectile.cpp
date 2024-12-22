@@ -3,12 +3,15 @@
 #include <vector>
 #include "projectile.hpp"
 
-Projectile::Projectile(Vector3 position, Vector3 size, Vector2 speed, Texture2D texture, int team) {
+Projectile::Projectile(Vector3 position, float scale, float hitboxSize, Vector2 speed, Texture2D texture, int team) {
     this->position = position;
-    this->size = size;
+    this->scale = scale;
+    this->hitboxSize = hitboxSize;
     this->speed = speed;
     this->texture = texture;
     this->team = team;
+    this->tint = WHITE;
+    this->debugTint = WHITE;
 };
 
 void Projectile::update(){

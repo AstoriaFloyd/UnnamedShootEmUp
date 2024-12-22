@@ -8,20 +8,21 @@
 
 extern std::vector<Entity*> entities;
 
-extern Texture2D missingTexture;
+extern bool renderDebug;
 
 Player::Player(Texture2D texture, Texture2D bullet){
     this->position = {0.0f, 0.0f, 0.0f};
-    this->size = {1.0f, 1.0f, 0.0f};
-    this->tint = GREEN;
+    this->scale = 1.0f;
+    this->hitboxSize = 0.2f;
+    this->tint = WHITE;
     this->texture = texture;
     this->bulletTexture = bullet;
     this->team = PLAYER;
+    collideWith = {ENEMY, ENEMYPROJECTILECONVENTIONAL, ENEMYPROJECTILEENERGY};
 }
 
 void Player::update(){
     controllerRoutine();
-    this->tint = GREEN;
 }
 
 void Player::controllerRoutine() {
@@ -74,31 +75,10 @@ void Player::controllerRoutine() {
     }
 
     if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)){
-        entities.push_back(new Projectile({ position.x, position.y, position.z }, { 0.5f, 0.5f, 0.0f }, {0.05f, 0.0f}, bulletTexture, PLAYERPORJECTILECONVENTIONAL));
+        entities.push_back(new Projectile(position, 1.0f, 0.5f, {0.5f, 0.0f}, bulletTexture, PLAYERPORJECTILECONVENTIONAL));
     }
-}
 
-void Player::collide(std::vector<Entity*> entities){
-    for(auto e : entities){
-        switch(e->team){
-            case ENEMY:
-            case ENEMYPROJECTILECONVENTIONAL:
-            case ENEMYPROJECTILEENERGY:
-            if (CheckCollisionBoxes(
-            (BoundingBox){(Vector3){ this->position.x - this->size.x/2,
-                                        this->position.y - this->size.y/2,
-                                        this->position.z - this->size.z/2 },
-                            (Vector3){ this->position.x + this->size.x/2,
-                                        this->position.y + this->size.y/2,
-                                        this->position.z + this->size.z/2 }},
-            (BoundingBox){(Vector3){ e->position.x - e->size.x/2,
-                                        e->position.y - e->size.y/2,
-                                        e->position.z - e->size.z/2 },
-                            (Vector3){ e->position.x + e->size.x/2,
-                                        e->position.y + e->size.y/2,
-                                        e->position.z + e->size.z/2 }})){
-            this->tint = RED;
-            }
-        }
+    if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)){
+        renderDebug = !renderDebug;
     }
 }

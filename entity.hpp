@@ -15,25 +15,27 @@
 class Entity {
     public:
         Vector3 position;
-        Vector3 size;
+        float scale;
+        float hitboxSize;
         //Maybe shouldnt be public.
         //Used to determine if class SHOULD collide.
         int team;
+        std::vector<int> collideWith;
         Texture2D texture;
         Color tint;
+        //For debugging reasons.
+        Color debugTint;
         Entity();
-        Entity(Vector3 position, Vector3 size, Texture2D texture, int team);
-
-        //Set positions
-        void setPosition(Vector3 position);
-        void setSize(Vector3 size);
+        Entity(Vector3 position, float scale, float hitboxSize, Texture2D texture, int team);
 
         //Basic renderer, to be overridden
         virtual void render();
-
+        //DEBUG FUNCTION
+        virtual void renderHitbox();
         //Updates every frame
         virtual void update();
 
         virtual void collide(std::vector<Entity*> entities);
+        virtual void onCollide(Entity* entity);
         void erase();
 };
