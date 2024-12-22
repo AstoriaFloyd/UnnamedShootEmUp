@@ -3,13 +3,11 @@
 #include <vector>
 #include "projectile.hpp"
 
-
-
-Projectile::Projectile(Vector3 position, Vector3 size, Vector2 speed, Color color, int team) {
+Projectile::Projectile(Vector3 position, Vector3 size, Vector2 speed, Texture2D texture, int team) {
     this->position = position;
     this->size = size;
     this->speed = speed;
-    this->color = color;
+    this->texture = texture;
     this->team = team;
 };
 

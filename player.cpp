@@ -8,16 +8,20 @@
 
 extern std::vector<Entity*> entities;
 
-Player::Player(){
-    position = {0.0f, 0.0f, 0.0f};
-    size = {1.0f, 1.0f, 0.0f};
-    color = GREEN;
-    team = PLAYER;
+extern Texture2D missingTexture;
+
+Player::Player(Texture2D texture, Texture2D bullet){
+    this->position = {0.0f, 0.0f, 0.0f};
+    this->size = {1.0f, 1.0f, 0.0f};
+    this->tint = GREEN;
+    this->texture = texture;
+    this->bulletTexture = bullet;
+    this->team = PLAYER;
 }
 
 void Player::update(){
     controllerRoutine();
-    this->color = GREEN;
+    this->tint = GREEN;
 }
 
 void Player::controllerRoutine() {
@@ -69,8 +73,8 @@ void Player::controllerRoutine() {
 
     }
 
-    if(IsGamepadButtonDown(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)){
-        entities.push_back(new Projectile({ position.x, position.y, position.z }, { 0.5f, 0.5f, 0.0f }, {0.05f, 0.0f}, GRAY, PLAYERPORJECTILECONVENTIONAL));
+    if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)){
+        entities.push_back(new Projectile({ position.x, position.y, position.z }, { 0.5f, 0.5f, 0.0f }, {0.05f, 0.0f}, bulletTexture, PLAYERPORJECTILECONVENTIONAL));
     }
 }
 
@@ -80,22 +84,21 @@ void Player::collide(std::vector<Entity*> entities){
             case ENEMY:
             case ENEMYPROJECTILECONVENTIONAL:
             case ENEMYPROJECTILEENERGY:
-                if (CheckCollisionBoxes(
+            if (CheckCollisionBoxes(
             (BoundingBox){(Vector3){ this->position.x - this->size.x/2,
-                                     this->position.y - this->size.y/2,
-                                     this->position.z - this->size.z/2 },
-                          (Vector3){ this->position.x + this->size.x/2,
-                                     this->position.y + this->size.y/2,
-                                     this->position.z + this->size.z/2 }},
+                                        this->position.y - this->size.y/2,
+                                        this->position.z - this->size.z/2 },
+                            (Vector3){ this->position.x + this->size.x/2,
+                                        this->position.y + this->size.y/2,
+                                        this->position.z + this->size.z/2 }},
             (BoundingBox){(Vector3){ e->position.x - e->size.x/2,
-                                     e->position.y - e->size.y/2,
-                                     e->position.z - e->size.z/2 },
-                          (Vector3){ e->position.x + e->size.x/2,
-                                     e->position.y + e->size.y/2,
-                                     e->position.z + e->size.z/2 }})){
-                                        this->color = RED;
-                                     }
-                
+                                        e->position.y - e->size.y/2,
+                                        e->position.z - e->size.z/2 },
+                            (Vector3){ e->position.x + e->size.x/2,
+                                        e->position.y + e->size.y/2,
+                                        e->position.z + e->size.z/2 }})){
+            this->tint = RED;
+            }
         }
     }
 }

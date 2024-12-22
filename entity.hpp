@@ -17,11 +17,12 @@ class Entity {
         Vector3 position;
         Vector3 size;
         //Maybe shouldnt be public.
-        Color color;
         //Used to determine if class SHOULD collide.
         int team;
+        Texture2D texture;
+        Color tint;
         Entity();
-        Entity(Vector3 position, Vector3 size, Color color, int team);
+        Entity(Vector3 position, Vector3 size, Texture2D texture, int team);
 
         //Set positions
         void setPosition(Vector3 position);

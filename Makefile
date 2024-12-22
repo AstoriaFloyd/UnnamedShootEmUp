@@ -18,7 +18,7 @@ rm-cdi:
 	-rm -f $(CDI)
 
 $(CDI): $(TARGET)
-	mkdcdisc -e $(TARGET) -o $(CDI)
+	mkdcdisc -v 3 -e $(TARGET) -D assets -o $(CDI)
 
 $(TARGET): $(OBJS)
 	kos-c++ -o $(TARGET) $(OBJS) -lraylib -lGL -lkosutils
@@ -27,10 +27,10 @@ $(TARGET): $(OBJS)
 run-old: $(TARGET)
 	$(KOS_LOADER) $(TARGET)
 
-run: $(TARGET)
+run-elf: $(TARGET)
 	flatpak run org.flycast.Flycast $(TARGET)
 
-run-cdi: $(CDI)
+run: $(CDI)
 	flatpak run org.flycast.Flycast $(CDI)
 
 cdi: $(CDI)

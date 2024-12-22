@@ -6,7 +6,7 @@
 
 class Projectile : public Entity {
     public:
-        Projectile(Vector3 position, Vector3 size, Vector2 speed, Color color, int team);
+        Projectile(Vector3 position, Vector3 size, Vector2 speed, Texture texture, int team);
         Vector2 speed;
         void update();
     private:
