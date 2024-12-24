@@ -25,11 +25,12 @@ class Entity {
         Color tint;
         //For debugging reasons.
         Color debugTint;
+        Model model;
         Entity();
         Entity(Vector3 position, float scale, float hitboxSize, Texture2D texture, int team);
 
         //Basic renderer, to be overridden
-        virtual void render();
+        virtual void render(Matrix rotationMatrix, Vector3 centerPoint);
         //DEBUG FUNCTION
         virtual void renderHitbox();
         //Updates every frame

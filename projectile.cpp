@@ -12,6 +12,9 @@ Projectile::Projectile(Vector3 position, float scale, float hitboxSize, Vector2 
     this->team = team;
     this->tint = WHITE;
     this->debugTint = WHITE;
+    Mesh mesh = GenMeshCube(1.0f, 1.0f, 0.0f);
+    model = LoadModelFromMesh(mesh);
+    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
 };
 
 void Projectile::update(){

@@ -1,4 +1,5 @@
 #include <raylib.h>
+#include <raymath.h>
 #include <algorithm>
 
 
@@ -12,6 +13,7 @@ extern Texture2D missingTexture;
 
 extern bool renderDebug;
 
+
 Entity::Entity(){
     Entity({0.0f, 0.0f, 0.0f}, 1.0f, 0.5f, missingTexture, ENEMY);
 }
@@ -24,15 +26,22 @@ Entity::Entity(Vector3 position, float scale, float hitboxSize, Texture2D textur
     this->texture = texture;
     this->tint = WHITE;
     collideWith = {PLAYER, PLAYERPORJECTILECONVENTIONAL, PLAYERPORJECTILEENERGY};
+    Mesh mesh = GenMeshCube(1.0f, 1.0f, 0.0f);
+    model = LoadModelFromMesh(mesh);
+    model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture;
 }
 
-void Entity::render(){
+void Entity::render(Matrix rotationMatrix, Vector3 centerPoint){
     //DrawCubeV(position, size, color);
     //DrawPlane(position, {size.x, size.y}, color);
+
+    model.transform = rotationMatrix;
+
     if(!renderDebug)
-        DrawBillboard(camera, texture, position, scale, tint);
+        //DrawBillboard(camera, texture, Vector3Transform(position, rotationMatrix) + centerPoint, scale, tint);
+        DrawModel(model, Vector3Transform(position, rotationMatrix) + centerPoint, 1.0f, WHITE);
     else
-        DrawBillboard(camera, texture, position, scale, debugTint);
+        DrawBillboard(camera, texture, Vector3Transform(position, rotationMatrix) + centerPoint, scale, debugTint);
     //Breaks tinting, for debug purposes.
 }
 
