@@ -120,7 +120,7 @@ void Player::controllerRoutine() {
         renderDebug = !renderDebug;
     }
 
-    if(IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_MIDDLE_RIGHT) && IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT) && IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_LEFT) && IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_UP) && IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)){
+    if(IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_MIDDLE_RIGHT) && IsGamepadButtonDown(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT) && IsGamepadButtonDown(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_LEFT) && IsGamepadButtonDown(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_UP) && IsGamepadButtonDown(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)){
         quitGame = true;
     }
 }
