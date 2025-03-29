@@ -1,1 +1,5 @@
 brokenmoonshmup.elf
+entity.o
+main.o
+player.o
+projectile.o
