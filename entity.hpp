@@ -32,7 +32,7 @@ class Entity {
         //Basic renderer, to be overridden
         virtual void render(Matrix rotationMatrix, Vector3 centerPoint);
         //DEBUG FUNCTION
-        virtual void renderHitbox();
+        virtual void renderHitbox(Matrix rotationMatrix, Vector3 centerPoint);
         //Updates every frame
         virtual void update();
 

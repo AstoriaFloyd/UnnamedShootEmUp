@@ -8,13 +8,19 @@
 #include "player.hpp"
 #include "projectile.hpp"
 
+#ifdef __DREAMCAST__
+#  define PLATFORM_IS_DREAMCAST 1
+#else
+#  define PLATFORM_IS_DREAMCAST 0
+#endif
+
 //480p my beloved
 #define SCREEN_WDITH 640
 #define SCREEN_HEIGHT 480
 
 
 //Don't think WindowShouldClose() works right on dreamcast? Check into that.
-static bool quitGame = false;
+bool quitGame = false;
 
 const float leftStickDeadzoneX = 0.1f;
 const float leftStickDeadzoneY = 0.1f;
@@ -38,18 +44,26 @@ float yaw = 0.0f;
 Vector3 centerPoint = {14.0f, 3.0f, 0.0f};
 
 int main() {
-    InitWindow(SCREEN_WDITH, SCREEN_HEIGHT, "Does this get used? Unnamed Broken-Moon Shmup.");
+    InitWindow(SCREEN_WDITH, SCREEN_HEIGHT, "Unnamed Broken-Moon Shmup.");
 
     //Target 60, for now.
-    SetTargetFPS(60);
+    //SetTargetFPS(60);
     
     entities.reserve(1024);
+
+    std::string path;
+
+    if(PLATFORM_IS_DREAMCAST){
+        path = "/pc/home/astoria/dev/raylib4dc/BrokenMoonShmupC++/assets";
+    } else {
+        path = "assets";
+    }
     
-    Image image = LoadImage("/cd/MissingTexture.png");
+    Image image = LoadImage((path + "/MissingTexture.png").c_str());
     missingTexture = LoadTextureFromImage(image);
     UnloadImage(image);
 
-    Model skybox = LoadModel("/cd/ParkingLot.obj");
+    Model skybox = LoadModel((path + "/ParkingLot.obj").c_str());
 
     //Mesh sphereMesh = GenMeshHemiSphere(1.0f, 16, 16);
     //Model skybox = LoadModelFromMesh(sphereMesh);
@@ -71,6 +85,11 @@ int main() {
     entities.push_back(new Projectile({ -3.5f, -1.0f, 0.0f }, 1.0f, 0.5f, {0.05f, 0.0f}, missingTexture, ENEMYPROJECTILEENERGY));
 
     while(!quitGame) {
+
+        if (WindowShouldClose()){
+            quitGame = true;
+        }
+
         int counter = 0;
         for(Entity* e:entities){
             e->update();
@@ -84,9 +103,9 @@ int main() {
         }
 
 
-        yaw += 0.1f;
+        //yaw += 0.1f;
 
-        camera.position = centerPoint + Vector3Transform(cameraPosition, MatrixRotateXYZ((Vector3){ DEG2RAD*pitch, DEG2RAD*yaw, DEG2RAD*roll }));
+        camera.position = Vector3Add(centerPoint, Vector3Transform(cameraPosition, MatrixRotateXYZ((Vector3){ DEG2RAD*pitch, DEG2RAD*yaw, DEG2RAD*roll })));
         camera.target = centerPoint;
         camera.up = Vector3Transform(upVector, MatrixRotateXYZ((Vector3){ DEG2RAD*pitch, DEG2RAD*yaw, DEG2RAD*roll }));
         //camera.up = (Vector3){ DEG2RAD*pitch, DEG2RAD*yaw + 180, DEG2RAD*roll };
@@ -105,7 +124,7 @@ int main() {
                 for(Entity* e:entities){
                     e->render(MatrixRotateXYZ((Vector3){ DEG2RAD*pitch, DEG2RAD*yaw, DEG2RAD*roll }), centerPoint);
                     if(renderDebug)
-                        e->renderHitbox();
+                        e->renderHitbox(MatrixRotateXYZ((Vector3){ DEG2RAD*pitch, DEG2RAD*yaw, DEG2RAD*roll }), centerPoint);
                 }
                 //TestEntity.render();
                 //player.render();
@@ -128,4 +147,6 @@ int main() {
 
         EndDrawing();
     }
+
+    CloseWindow();
 }

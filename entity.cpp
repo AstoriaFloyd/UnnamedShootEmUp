@@ -39,16 +39,16 @@ void Entity::render(Matrix rotationMatrix, Vector3 centerPoint){
 
     if(!renderDebug)
         //DrawBillboard(camera, texture, Vector3Transform(position, rotationMatrix) + centerPoint, scale, tint);
-        DrawModel(model, Vector3Transform(position, rotationMatrix) + centerPoint, 1.0f, WHITE);
+        DrawModel(model, Vector3Add(Vector3Transform(position, rotationMatrix), centerPoint), 1.0f, WHITE);
     else
-        DrawBillboard(camera, texture, Vector3Transform(position, rotationMatrix) + centerPoint, scale, debugTint);
+        DrawModel(model, Vector3Add(Vector3Transform(position, rotationMatrix), centerPoint), 1.0f, debugTint);
     //Breaks tinting, for debug purposes.
 }
 
-void Entity::renderHitbox(){
+void Entity::renderHitbox(Matrix rotationMatrix, Vector3 centerPoint){
     //DrawCubeV(position, size, color);
     //DrawPlane(position, {size.x, size.y}, color);
-    DrawSphere({position.x, position.y, position.z}, hitboxSize * scale, { 230, 41, 55, 155 });
+    DrawSphere(Vector3Add(Vector3Transform(position, rotationMatrix), centerPoint), hitboxSize * scale, { 230, 41, 55, 155 });
 }
 
 void Entity::update(){

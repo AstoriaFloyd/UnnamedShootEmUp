@@ -19,6 +19,8 @@ extern float roll;
 
 extern float yaw;
 
+extern bool quitGame;
+
 Player::Player(Texture2D texture, Texture2D bullet){
     this->position = {0.0f, 0.0f, 0.0f};
     this->scale = 1.0f;
@@ -43,18 +45,20 @@ void Player::controllerRoutine() {
     bool up;
     bool down;
 
+    int controllerId = 0;
+
     float speed = 0.05;
 
     float diagonalModifier = 0.70711f;
 
-    if(!IsGamepadAvailable(0))
+    if(!IsGamepadAvailable(controllerId))
         return;
 
     //All of this is dpad
-    right = IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_RIGHT);
-    left = IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_LEFT);
-    up = IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_UP);
-    down = IsGamepadButtonDown(0, GAMEPAD_BUTTON_LEFT_FACE_DOWN);
+    right = IsGamepadButtonDown(controllerId, GAMEPAD_BUTTON_LEFT_FACE_RIGHT);
+    left = IsGamepadButtonDown(controllerId, GAMEPAD_BUTTON_LEFT_FACE_LEFT);
+    up = IsGamepadButtonDown(controllerId, GAMEPAD_BUTTON_LEFT_FACE_UP);
+    down = IsGamepadButtonDown(controllerId, GAMEPAD_BUTTON_LEFT_FACE_DOWN);
 
     if(right || left || up ||down){
         /*
@@ -84,8 +88,8 @@ void Player::controllerRoutine() {
             pitch += 2.0f;
     } else {
         //Do analog stick
-        float leftStickX = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_X);
-        float leftStickY = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_Y);
+        float leftStickX = GetGamepadAxisMovement(controllerId, GAMEPAD_AXIS_LEFT_X);
+        float leftStickY = GetGamepadAxisMovement(controllerId, GAMEPAD_AXIS_LEFT_Y);
 
         //Dead zones
         if (leftStickX > -leftStickDeadzoneX && leftStickX < leftStickDeadzoneX) leftStickX = 0.0f;
@@ -96,8 +100,8 @@ void Player::controllerRoutine() {
         position.x += leftStickX * 2.0f;
     }
 
-        float leftTrigger = GetGamepadAxisMovement(0, GAMEPAD_AXIS_LEFT_TRIGGER);
-        float rightTrigger = GetGamepadAxisMovement(0, GAMEPAD_AXIS_RIGHT_TRIGGER);
+        float leftTrigger = GetGamepadAxisMovement(controllerId, GAMEPAD_AXIS_LEFT_TRIGGER);
+        float rightTrigger = GetGamepadAxisMovement(controllerId, GAMEPAD_AXIS_RIGHT_TRIGGER);
         if (leftTrigger > -leftStickDeadzoneX && leftTrigger < leftStickDeadzoneX) leftTrigger = 0.0f;
         if (rightTrigger > -leftStickDeadzoneY && rightTrigger < leftStickDeadzoneY) rightTrigger = 0.0f;
 
@@ -108,11 +112,15 @@ void Player::controllerRoutine() {
         roll += rightTrigger * 2.0f;
 
 
-    if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)){
+    if(IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT)){
         entities.push_back(new Projectile(position, 1.0f, 0.5f, {0.5f, 0.0f}, bulletTexture, PLAYERPORJECTILECONVENTIONAL));
     }
 
-    if(IsGamepadButtonPressed(0, GAMEPAD_BUTTON_MIDDLE_RIGHT)){
+    if(IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_MIDDLE_RIGHT)){
         renderDebug = !renderDebug;
+    }
+
+    if(IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_MIDDLE_RIGHT) && IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_RIGHT) && IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_LEFT) && IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_UP) && IsGamepadButtonPressed(controllerId, GAMEPAD_BUTTON_RIGHT_FACE_DOWN)){
+        quitGame = true;
     }
 }
