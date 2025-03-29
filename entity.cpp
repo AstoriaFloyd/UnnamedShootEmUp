@@ -48,6 +48,8 @@ void Entity::render(Matrix rotationMatrix, Vector3 centerPoint){
 void Entity::renderHitbox(Matrix rotationMatrix, Vector3 centerPoint){
     //DrawCubeV(position, size, color);
     //DrawPlane(position, {size.x, size.y}, color);
+    //TODO:
+    //Really expensive, should be replaced
     DrawSphere(Vector3Add(Vector3Transform(position, rotationMatrix), centerPoint), hitboxSize * scale, { 230, 41, 55, 155 });
 }
 

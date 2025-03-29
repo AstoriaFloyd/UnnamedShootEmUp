@@ -54,7 +54,8 @@ int main() {
     std::string path;
 
     if(PLATFORM_IS_DREAMCAST){
-        path = "/pc/home/astoria/dev/raylib4dc/BrokenMoonShmupC++/assets";
+        //path = "/pc/home/astoria/dev/raylib4dc/BrokenMoonShmupC++/assets";
+        path = "/cd";
     } else {
         path = "assets";
     }
